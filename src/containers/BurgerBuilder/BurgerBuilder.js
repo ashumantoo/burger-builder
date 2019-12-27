@@ -99,6 +99,16 @@ class BurgerBuilder extends Component {
         return (
             <Aux>
                 <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
+                    {/** - This OrderSummary Component always render event if we are not opening 
+                     *     the modal, and this reduce the app performance.
+                     * 
+                     *   - So this OrderSummary Component should only render on the dom if the model
+                     *     is open otherwise it should not be render on the dom.
+                     *  
+                     *   - For this we should restrict the OrderSummary component to render by putting 
+                     *     a condition on the Model Component using ShouldcomponentUpdate() life Cycle 
+                     *     hook of the React component.  
+                     */}
                     <OrderSummary
                         ingredients={this.state.ingredients}
                         purchaseCanceled={this.purchaseCancelHandler}
