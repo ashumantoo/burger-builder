@@ -8,7 +8,7 @@ class Modal extends Component {
     //This life Cycle hook check if the model is open or not
     //and this will make sure that OrderSummary Component only render when the model is open
     shouldComponentUpdate(nextProps, nextState) {
-        return nextProps.show !== this.props.show;
+        return nextProps.show !== this.props.show || nextProps.children !== this.props.children;
     }
 
     componentWillUpdate() {
