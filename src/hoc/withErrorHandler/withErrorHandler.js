@@ -21,15 +21,23 @@ const withErrorHandler = (WrappedComponent, axios) => {
         // we should use componentWillMount() or constructor method.
         componentWillMount() {
             //on http request setting back error to null becoz on request we don't have error 
-            axios.interceptors.request.use(req => {
+            this.reqInterceptors = axios.interceptors.request.use(req => {
                 this.setState({ error: null });
                 return req;
             })
-
             //setting error to the http response error if we have any
-            axios.interceptors.response.use(res => res, error => {
+            this.resInterceptors = axios.interceptors.response.use(res => res, error => {
                 this.setState({ error: error });
             });
+        }
+
+        //this will unmount the component from the memory once we moved on the different component or page
+        //if we don't unmount the axios interceptors then this hoc will called for every component which wrapped this hoc
+        //and this will lead to the error or some memory leaks because they always sits in the memory if we don;t
+        //unmount this. 
+        componentWillUnmount() {
+            axios.interceptors.request.eject(this.reqInterceptors);
+            axios.interceptors.response.eject(this.resInterceptors);
         }
 
         errorConfirmHandler = () => {
