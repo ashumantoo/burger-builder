@@ -16,7 +16,10 @@ const withErrorHandler = (WrappedComponent, axios) => {
 
         //we can use axios interceptor here which allow us to handle the http error
         //globally
-        componentDidMount() {
+        //CompoenntDidMount execute before the child component thus this will not able
+        //to catch the error which occurred in the child component. to fix this
+        // we should use componentWillMount() or constructor method.
+        componentWillMount() {
             //on http request setting back error to null becoz on request we don't have error 
             axios.interceptors.request.use(req => {
                 this.setState({ error: null });
