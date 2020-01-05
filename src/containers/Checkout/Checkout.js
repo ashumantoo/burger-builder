@@ -13,6 +13,17 @@ class Checkout extends Component {
         }
     }
 
+    componentDidMount() {
+
+        //extracting the query params which is passed to the url params
+        const query = new URLSearchParams(this.props.location.search);
+        const ingredients = {};
+        for (let params of query.entries()) {
+            ingredients[params[0]] = +params[1];
+        }
+        this.setState({ ingredients: ingredients });
+    }
+
     checkoutCancelledHandler = () => {
         //going back to the previous page using the react router props history goBack method
         this.props.history.goBack();
