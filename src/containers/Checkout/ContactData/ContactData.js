@@ -81,6 +81,23 @@ class ContactData extends Component {
             this.setState({ loading: false });
         });
     }
+
+    inputChangedHandler = (event, inputIdentifer) => {
+        console.log(event.target.value);
+        const updatedOrderForm = {
+            ...this.state.orderForm
+        }
+        //Deep cloning of the order form object (nested object mutation)
+        //not change the original one
+        const updatedFormElement = {
+            ...updatedOrderForm[inputIdentifer]
+        };
+
+        updatedFormElement.value = event.target.value;
+        updatedOrderForm[inputIdentifer] = updatedFormElement;
+        this.setState({ orderForm: updatedOrderForm });
+    }
+
     render() {
         const formElementArray = [];
         for (let key in this.state.orderForm) {
@@ -105,6 +122,7 @@ class ContactData extends Component {
                         elementType={formElement.config.elementType}
                         elementConfig={formElement.config.elementConfig}
                         value={formElement.config.value}
+                        changed={(event) => this.inputChangedHandler(event, formElement.id)}
                     />
                 ))}
                 <Button btnType="Success" clicked={this.orderHandler}>Order </Button>
