@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-orders';
+import burgerBuilderService from '../../services/burgerBuilder';
 
 export const addIngredient = (name) => {
     return {
@@ -40,7 +40,7 @@ export const removeIngredient = (name) => {
 // }
 
 export const initIngredients = () => dispatch => {
-    return axios.get('https://burger-builder-3f9d5.firebaseio.com/ingredients.json')
+    return burgerBuilderService.getIngredients()
         .then(response => {
             dispatch(setIngredients(response.data));
         }).catch(error => {
@@ -48,5 +48,5 @@ export const initIngredients = () => dispatch => {
         });
 
     function setIngredients(ingredients) { return { type: actionTypes.SET_INGREDIENTS, ingredients } }
-    function fetchIngredientsFailed() { return {type:actionTypes.FETCH_INGREDIENTS_FAILED}}
+    function fetchIngredientsFailed() { return { type: actionTypes.FETCH_INGREDIENTS_FAILED } }
 }
