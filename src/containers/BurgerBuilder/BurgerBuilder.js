@@ -25,8 +25,6 @@ class BurgerBuilder extends Component {
     //creating the ingredients data using the state
     state = {
         purchasing: false,
-        loading: false,
-        error: false
     }
 
     //A good place to fetch the data from api
@@ -37,6 +35,7 @@ class BurgerBuilder extends Component {
         //     }).catch(error => {
         //         this.setState({ error: error });
         //     });
+        this.props.onInitIngredients();
     }
 
     updatePurchaseState(ingredients) {
@@ -120,7 +119,7 @@ class BurgerBuilder extends Component {
         }
 
         let orderSummary = null;
-        let burger = this.state.error ? <p>Ingredients can't be loaded</p> : <Spinner />
+        let burger = this.props.error ? <p>Ingredients can't be loaded</p> : <Spinner />
 
         if (this.props.ingredients) {
             burger = (
@@ -147,10 +146,6 @@ class BurgerBuilder extends Component {
                 price={this.props.totalPrice} />;
         }
 
-        if (this.state.loading) {
-            orderSummary = <Spinner />
-        }
-
         return (
             <Aux>
                 <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
@@ -175,7 +170,8 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => {
     return {
         ingredients: state.ingredients,
-        totalPrice: state.totalPrice
+        totalPrice: state.totalPrice,
+        error: state.error
     }
 }
 
@@ -187,7 +183,8 @@ const mapDispatchToProps = dispatch => {
 
         //using the action creators
         onIngredientsAdded: (ingName) => dispatch(burgerBuilderActions.addIngredient(ingName)),
-        onIngredientsRemoved: (ingName) => dispatch(burgerBuilderActions.removeIngredient(ingName))
+        onIngredientsRemoved: (ingName) => dispatch(burgerBuilderActions.removeIngredient(ingName)),
+        onInitIngredients: () => dispatch(burgerBuilderActions.initIngredients())
     }
 }
 
