@@ -22,6 +22,22 @@ export const authFail = (error) => {
     }
 }
 
+export const authLogout = () => {
+    return {
+        type: actionTypes.AUTH_LOGOUT
+    }
+}
+
+//Checking the validity of the token expire Time and Logging out user
+//after token expires
+export const checkAuthValidity = (tokenExpirationTime) => {
+    return dispatch => {
+        setTimeout(() => {
+            dispatch(authLogout());
+        }, tokenExpirationTime * 1000);
+    }
+}
+
 export const auth = (email, password, isSignUp) => {
     return dispatch => {
         dispatch(authStart());
@@ -44,6 +60,7 @@ export const auth = (email, password, isSignUp) => {
                 console.log(response);
                 //sending token and userId from action to the reducer
                 dispatch(authSuccess(response.data.idToken, response.data.localId));
+                dispatch(checkAuthValidity(response.data.expiresIn));
             })
             .catch(error => {
                 console.log(error);
