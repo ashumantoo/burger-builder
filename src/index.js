@@ -9,6 +9,7 @@ import './index.css';
 import App from './App';
 import burgerBuilderReducer from './store/reducers/burgerBuilder';
 import orderReducer from './store/reducers/order';
+import authReducer from './store/reducers/auth';
 
 
 //Redux Devtools implementation with redux store
@@ -20,7 +21,8 @@ const roodReducer = combineReducers({
     // state = burgerBuilder , reducer - burgerBuilderReducer
     // state = order , reducer = orderReducer
     burgerBuilder: burgerBuilderReducer,
-    order: orderReducer
+    order: orderReducer,
+    auth: authReducer
 })
 
 //redux-thunk is a middleware to run asynchronous code
