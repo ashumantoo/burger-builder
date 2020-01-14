@@ -23,6 +23,10 @@ export const authFail = (error) => {
 }
 
 export const authLogout = () => {
+    //removing the local storage items after logout
+    localStorage.removeItem('token');
+    localStorage.removeItem('expirationDate');
+    localStorage.removeItem('userId');
     return {
         type: actionTypes.AUTH_LOGOUT
     }
@@ -31,6 +35,7 @@ export const authLogout = () => {
 //Checking the validity of the token expire Time and Logging out user
 //after token expires
 export const checkAuthValidity = (tokenExpirationTime) => {
+    //token timeout expiration time checking
     return dispatch => {
         setTimeout(() => {
             dispatch(authLogout());
@@ -58,6 +63,12 @@ export const auth = (email, password, isSignUp) => {
             .post(URL, authData)
             .then(response => {
                 console.log(response);
+                // making expiresIn time from seconds to milliseconds because javascript time works in milliseconds
+                const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
+                //setting token and expirationDate to the local storage
+                localStorage.setItem('token', response.data.idToken);
+                localStorage.setItem('expirationDate', expirationDate);
+                localStorage.setItem('userId', response.data.localId);
                 //sending token and userId from action to the reducer
                 dispatch(authSuccess(response.data.idToken, response.data.localId));
                 dispatch(checkAuthValidity(response.data.expiresIn));
@@ -73,5 +84,28 @@ export const setAuthRedirectPath = (path) => {
     return {
         type: actionTypes.SET_AUTH_REDIRECT_PATH,
         path: path
+    }
+}
+
+//checking user authentication state by getting the data from the local storage
+//checking auto logging if token is not expire
+export const authCheckState = () => {
+    return dispatch => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            //if token did not found then just return the user by logging out
+            dispatch(authLogout());
+        } else {
+            const expirationDate = new Date(localStorage.getItem('expirationDate'));
+            if (expirationDate <= new Date()) {
+                //if token expiration Date is greater means token has been already expired
+                //and if this is the case then logout the user
+                dispatch(authLogout());
+            } else {
+                const userId = localStorage.getItem('userId');
+                dispatch(authSuccess(token, userId));
+                dispatch(checkAuthValidity((expirationDate.getTime() - new Date().getTime()) / 1000));
+            }
+        }
     }
 }
