@@ -9,6 +9,7 @@ import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../../axios-orders';
 import * as actions from '../../../store/actions/index';
 import { updateObject } from '../../../shared/utility';
+import { checkValidity } from '../../../shared/formValidation';
 
 class ContactData extends Component {
 
@@ -119,23 +120,6 @@ class ContactData extends Component {
         //     this.setState({ loading: false });
         // });
     }
-
-    checkValidity(value, rules) {
-        let isValid = true;
-        if (!rules) {
-            return true;
-        }
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid;
-        }
-        if (rules.maxLength) {
-            isValid = value.length <= rules.maxLength && isValid;
-        }
-        return isValid;
-    }
     inputChangedHandler = (event, inputIdentifer) => {
         /* // console.log(event.target.value);
          const updatedOrderForm = {
@@ -155,7 +139,7 @@ class ContactData extends Component {
         //updating form state using updateObject utility function
         const updatedFormElement = updateObject(this.state.orderForm[inputIdentifer], {
             value: event.target.value,
-            valid: this.checkValidity(event.target.value, this.state.orderForm[inputIdentifer].validation),
+            valid: checkValidity(event.target.value, this.state.orderForm[inputIdentifer].validation),
             touched: true
         });
         const updatedOrderForm = updateObject(this.state.orderForm, {
