@@ -27,6 +27,9 @@ class App extends Component {
         <Switch>
           <Route path="/checkout" component={Checkout} />
           <Route path="/orders" component={Orders} />
+          {/* here this auth routes, redirecting user to the checkout page 
+          if he ordering burger without authentication */}
+          <Route path="/auth" component={Auth} />
           <Route path="/logout" component={Logout} />
           <Route path="/" exact component={BurgerBuilder} />
           <Redirect to="/" />

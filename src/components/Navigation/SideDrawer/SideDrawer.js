@@ -15,7 +15,8 @@ const sideDrawer = (props) => {
     return (
         <Aux>
             <Backdrop show={props.open} clicked={props.closed} />
-            <div className={attachedClasses.join(' ')}>
+            {/* onClick method to closed the side Drawer if we click on any navigation or anywhere else */}
+            <div className={attachedClasses.join(' ')} onClick={props.closed}>
                 <div className={classes.Logo}>
                     <Logo />
                 </div>
