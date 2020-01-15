@@ -13,7 +13,9 @@ import authReducer from './store/reducers/auth';
 
 
 //Redux Devtools implementation with redux store
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+//if app is in the development mode then only enable the redux state mode otherwise set it to null in production mode
+//by using the process environment variable
+const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
 //combining the reducers
 const roodReducer = combineReducers({

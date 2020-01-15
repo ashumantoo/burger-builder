@@ -62,7 +62,6 @@ export const auth = (email, password, isSignUp) => {
         axios
             .post(URL, authData)
             .then(response => {
-                console.log(response);
                 // making expiresIn time from seconds to milliseconds because javascript time works in milliseconds
                 const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
                 //setting token and expirationDate to the local storage
@@ -74,7 +73,6 @@ export const auth = (email, password, isSignUp) => {
                 dispatch(checkAuthValidity(response.data.expiresIn));
             })
             .catch(error => {
-                console.log(error);
                 dispatch(authFail(error.response.data.error));
             });
     }

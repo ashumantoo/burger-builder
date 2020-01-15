@@ -10,8 +10,6 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../axios-orders';
 import * as actions from '../../store/actions/index';
-// import * as actionType from '../../store/actions/actionTypes';
-// import spinner from '../../components/UI/Spinner/Spinner';
 
 class BurgerBuilder extends Component {
 
