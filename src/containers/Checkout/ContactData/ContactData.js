@@ -8,6 +8,7 @@ import classes from './ContactData.module.css';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../../axios-orders';
 import * as actions from '../../../store/actions/index';
+import { updateObject } from '../../../shared/utility';
 
 class ContactData extends Component {
 
@@ -136,20 +137,30 @@ class ContactData extends Component {
         return isValid;
     }
     inputChangedHandler = (event, inputIdentifer) => {
-        // console.log(event.target.value);
-        const updatedOrderForm = {
-            ...this.state.orderForm
-        }
-        //Deep cloning of the order form object (nested object mutation)
-        //not change the original one
-        const updatedFormElement = {
-            ...updatedOrderForm[inputIdentifer]
-        };
+        /* // console.log(event.target.value);
+         const updatedOrderForm = {
+             ...this.state.orderForm
+         }
+         //Deep cloning of the order form object (nested object mutation)
+         //not change the original one
+         const updatedFormElement = {
+             ...updatedOrderForm[inputIdentifer]
+         };
+         updatedFormElement.value = event.target.value;
+         updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
+         updatedFormElement.touched = true;
+         updatedOrderForm[inputIdentifer] = updatedFormElement;
+         */
 
-        updatedFormElement.value = event.target.value;
-        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
-        updatedFormElement.touched = true;
-        updatedOrderForm[inputIdentifer] = updatedFormElement;
+        //updating form state using updateObject utility function
+        const updatedFormElement = updateObject(this.state.orderForm[inputIdentifer], {
+            value: event.target.value,
+            valid: this.checkValidity(event.target.value, this.state.orderForm[inputIdentifer].validation),
+            touched: true
+        });
+        const updatedOrderForm = updateObject(this.state.orderForm, {
+            [inputIdentifer]: updatedFormElement
+        });
 
         let formIsValid = true;
         for (let inputIdentifier in updatedOrderForm) {
