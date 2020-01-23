@@ -11,7 +11,8 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../axios-orders';
 import * as actions from '../../store/actions/index';
 
-class BurgerBuilder extends Component {
+//exporting this class for testing purpose but the default export still there
+export class BurgerBuilder extends Component {
 
     //We can also create state using the constructor but we need to always
     //call the super() inside the constructor
